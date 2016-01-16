@@ -1,9 +1,10 @@
 package com.jags;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,14 +15,25 @@ import java.util.stream.Collectors;
  */
 public class AddressBookRunner {
 
+    private static final Log LOG = LogFactory.getLog(AddressBookRunner.class);
+
+    //private static final String addressFilePath = System.getProperty("java.io.tmpdir") + "address.dat";
+    private static final String addressFilePath = FileUtils.getTempDirectoryPath() + "address.dat";
     private List<Address> addressList = new ArrayList<>();
+
 
     MenuHandler menuHandler = new MenuHandlerConsoleImpl();
     AddressHandler addressHandler = new AddressHandlerConsoleImpl();
 
     public void run(){
+        try {
+            LOG.debug("Loading addresses from saved file...");
+            loadSavedAddress();
+        } catch (Exception e) {
+            LOG.error("Exception reading saved addresses ", e);
+        }
         int choice = menuHandler.printMenuAndReadChoice();
-        while(choice > 0 && choice <= 6){
+        while(choice > 0 && choice < 6){
 
             switch (choice){
                 case 1:
@@ -43,7 +55,7 @@ public class AddressBookRunner {
                         addressHandler.print(printMatchedAddress.get());
                         System.out.println("Enter the new address details:");
                         Address editAddress = addressHandler.readEdit(printMatchedAddress.get());
-                        System.out.println("editAddress = " + editAddress);
+                        LOG.debug("editAddress = " + editAddress);
                         replaceEditTerm(editAddress,editUUID);
                     }else {
                         System.out.println("No address found to match with given UUID, please check again.");
@@ -56,12 +68,6 @@ public class AddressBookRunner {
                 case 5:
                     displayAllAddrs();
                     break;
-                case 6:
-                    System.out.println("first step in writing");
-                    Address saveAddress = new Address();
-                    System.out.println("came into case 6");
-                    saveAddrsToFile(saveAddress);
-                    break;
                 default:
                     break;
             }
@@ -69,7 +75,6 @@ public class AddressBookRunner {
             choice = menuHandler.printMenuAndReadChoice();
         }
     }
-
     private List<Address> findAddressMatchList(String searchString) {
         return addressList.stream().filter(addr -> (addr.matchName(searchString) || addr.matchEmail(searchString) || addr.matchPhone(searchString))).collect(Collectors.toList());
     }
@@ -108,23 +113,48 @@ public class AddressBookRunner {
         addressList.set(indexToEdit, addrToReplace);
     }
 
-    private void saveAddrsToFile(Address saveAddr){
-        try {
-            String fileName = "address.dat";
-            FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("java.io.tmpdir") + fileName);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(saveAddr);
-            objectOutputStream.close();
-            fileOutputStream.close();
-            System.out.println("File written and closed");
-        }catch (IOException i){
-            i.printStackTrace();
+
+    private void loadSavedAddress() throws Exception{
+        File addressFile = new File(addressFilePath);
+        if(addressFile.exists()){
+            FileInputStream fis = new FileInputStream(addressFile);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            addressList = (List<Address>) ois.readObject();
+            LOG.info("found " + addressList.size() + " addresses in saved file.");
+        }else{
+            LOG.warn("No existing address file found, safe to ignore if this is a first run.");
         }
     }
 
+    private void saveAddrsToFile(){
+        try {
+            LOG.debug("Saving address to file [" + addressFilePath + "]");
+            FileOutputStream fileOutputStream = new FileOutputStream(addressFilePath);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(addressList);
+            objectOutputStream.close();
+            fileOutputStream.close();
+            LOG.debug("address file saved successfully");
+        }catch (IOException i){
+            LOG.error("failed to save address file", i);
+        }
+    }
+
+    public void attachShutDownHook(){
+        LOG.debug("Attempting to attach a Shutdown hook");
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                LOG.info("Saving the address to file on Shutdown...");
+                saveAddrsToFile();
+            }
+        });
+        LOG.debug("Shutdown hook attached successfully...");
+    }
+
     public static void main(String[] args) {
-        System.out.println(System.getProperty("java.io.tmpdir"));
         AddressBookRunner addressBookRunner = new AddressBookRunner();
+        addressBookRunner.attachShutDownHook();
         addressBookRunner.run();
 
     }
