@@ -3,7 +3,6 @@ package com.jags.fxui;
 import com.jags.Address;
 import com.jags.utils.AddressBookUtil;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -11,8 +10,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
+import javafx.scene.control.Pagination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -20,11 +19,12 @@ import javafx.util.Callback;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
-import static com.jags.utils.Wellknown.*;
+import static com.jags.utils.Wellknown.WINDOW_HEIGHT;
+import static com.jags.utils.Wellknown.WINDOW_WIDTH;
 
 /**
  * Created by Teja Kantamneni on 1/17/16.
@@ -43,6 +43,7 @@ public class AddressBook extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         final Group root = new Group();
+
         initAddressBook();
         pagination = new Pagination((addressObservableList.size() / rowsPerPage()), 0);
         pagination.setPageFactory(new Callback<Integer, Node>() {
@@ -51,8 +52,13 @@ public class AddressBook extends Application {
                 if (pageIndex > addressObservableList.size() / rowsPerPage() + 1) {
                     return null;
                 } else {
-                    return createPage(pageIndex);
+                    try {
+                        return createPage(pageIndex);
+                    } catch (IOException e) {
+                        LOG.error("Unable to create page, ", e);
+                    }
                 }
+                return null;
             }
         });
 
@@ -93,8 +99,8 @@ public class AddressBook extends Application {
         return 1;
     }
 
-    public VBox createPage(int pageIndex) {
-
+    public VBox createPage(int pageIndex) throws IOException {
+        FXMLLoader.load(getClass().getResource("/address.fxml"));
         VBox box = new VBox(5);
         Label firstNameLabel = new Label(addressObservableList.get(pageIndex).getFirstName());
 
