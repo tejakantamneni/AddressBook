@@ -1,5 +1,6 @@
 package com.jags;
 
+import com.jags.utils.AddressBookUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,8 +18,6 @@ public class AddressBookRunner {
 
     private static final Log LOG = LogFactory.getLog(AddressBookRunner.class);
 
-    //private static final String addressFilePath = System.getProperty("java.io.tmpdir") + "address.dat";
-    private static final String addressFilePath = FileUtils.getTempDirectoryPath() + "address.dat";
     private List<Address> addressList = new ArrayList<>();
 
 
@@ -28,7 +27,10 @@ public class AddressBookRunner {
     public void run(){
         try {
             LOG.debug("Loading addresses from saved file...");
-            loadSavedAddress();
+            List<Address> addressListFromFile = AddressBookUtil.loadAddressListFromFile();
+            if(addressListFromFile != null && !addressListFromFile.isEmpty()){
+                addressList.addAll(addressListFromFile);
+            }
         } catch (Exception e) {
             LOG.error("Exception reading saved addresses ", e);
         }
@@ -114,31 +116,6 @@ public class AddressBookRunner {
     }
 
 
-    private void loadSavedAddress() throws Exception{
-        File addressFile = new File(addressFilePath);
-        if(addressFile.exists()){
-            FileInputStream fis = new FileInputStream(addressFile);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            addressList = (List<Address>) ois.readObject();
-            LOG.info("found " + addressList.size() + " addresses in saved file.");
-        }else{
-            LOG.warn("No existing address file found, safe to ignore if this is a first run.");
-        }
-    }
-
-    private void saveAddrsToFile(){
-        try {
-            LOG.debug("Saving address to file [" + addressFilePath + "]");
-            FileOutputStream fileOutputStream = new FileOutputStream(addressFilePath);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(addressList);
-            objectOutputStream.close();
-            fileOutputStream.close();
-            LOG.debug("address file saved successfully");
-        }catch (IOException i){
-            LOG.error("failed to save address file", i);
-        }
-    }
 
     public void attachShutDownHook(){
         LOG.debug("Attempting to attach a Shutdown hook");
@@ -146,7 +123,11 @@ public class AddressBookRunner {
             @Override
             public void run() {
                 LOG.info("Saving the address to file on Shutdown...");
-                saveAddrsToFile();
+                try {
+                    AddressBookUtil.saveAddressListToFile(addressList);
+                } catch (IOException e) {
+                    LOG.error("Unable to persist the addresses to file.", e);
+                }
             }
         });
         LOG.debug("Shutdown hook attached successfully...");
