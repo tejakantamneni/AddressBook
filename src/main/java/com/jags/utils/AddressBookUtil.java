@@ -1,7 +1,6 @@
 package com.jags.utils;
 
 import com.jags.Address;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -14,10 +13,8 @@ import java.util.List;
 public final class AddressBookUtil {
     private static final Log LOG = LogFactory.getLog(AddressBookUtil.class);
 
-    public static final String addressFilePath = FileUtils.getTempDirectoryPath() + "address.dat";
-
     public static List<Address> loadAddressListFromFile() throws IOException, ClassNotFoundException {
-        File addressFile = new File(addressFilePath);
+        File addressFile = new File(Wellknown.ADDRESS_FILE_PATH);
         if(addressFile.exists()){
             FileInputStream fis = new FileInputStream(addressFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -32,8 +29,8 @@ public final class AddressBookUtil {
 
     public static void saveAddressListToFile(List<Address> addressList) throws IOException {
         try {
-            LOG.debug("Saving address to file [" + addressFilePath + "]");
-            FileOutputStream fileOutputStream = new FileOutputStream(addressFilePath);
+            LOG.debug("Saving address to file [" + Wellknown.ADDRESS_FILE_PATH + "]");
+            FileOutputStream fileOutputStream = new FileOutputStream(Wellknown.ADDRESS_FILE_PATH);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(addressList);
             objectOutputStream.close();
