@@ -81,8 +81,10 @@ public class AddressHandlerConsoleImpl implements AddressHandler {
 
     @Override
     public void print(List<Address> addressList) {
-        for(Address addr: addressList){
-            print(addr);
+        if(addressList != null) {
+            for(Address addr: addressList){
+                print(addr);
+            }
         }
     }
 
