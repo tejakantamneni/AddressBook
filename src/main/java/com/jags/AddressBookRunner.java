@@ -5,6 +5,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,7 @@ public class AddressBookRunner {
     //private static final String addressFilePath = System.getProperty("java.io.tmpdir") + "address.dat";
     private static final String addressFilePath = FileUtils.getTempDirectoryPath() + "address.dat";
     private List<Address> addressList = new ArrayList<>();
+    private AddressDAO addressDAO = new AddressDAOImpl();
 
 
     MenuHandler menuHandler = new MenuHandlerConsoleImpl();
@@ -39,6 +43,11 @@ public class AddressBookRunner {
                 case 1:
                     Address address = addressHandler.read();
                     addressList.add(address);
+                    try {
+                        addressDAO.insertData(addressDAO.createConnection(), address);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 2:
                     String searchString = addressHandler.readSearchTerm();
@@ -67,6 +76,12 @@ public class AddressBookRunner {
                     break;
                 case 5:
                     displayAllAddrs();
+                    try {
+                        addressDAO.readData(addressDAO.createConnection());
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;
@@ -152,8 +167,15 @@ public class AddressBookRunner {
         LOG.debug("Shutdown hook attached successfully...");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         AddressBookRunner addressBookRunner = new AddressBookRunner();
+        AddressDAO addressDAO = new AddressDAOImpl();
+        Connection connection = addressDAO.createConnection();
+        try {
+            addressDAO.createTable(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         addressBookRunner.attachShutDownHook();
         addressBookRunner.run();
 
