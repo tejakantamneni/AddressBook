@@ -14,4 +14,6 @@ public interface AddressDAO {
 
     List<Address> getAllAddressList(Connection connection) throws SQLException;
 
+    List<Address> findMatcingAddressList(Connection connection, String searchTerm) throws SQLException;
+
 }

@@ -65,6 +65,30 @@ public class AddressDAOImpl implements AddressDAO {
         String sql = "select UUID, FIRSTNAME, LASTNAME, ADDRESS1, ADDRESS2, CITY, STATE, ZIP, PHONE, EMAIL from address";
         Statement stmt = dbCon.createStatement();
         ResultSet resultSet = stmt.executeQuery(sql);
+        parseResultSet(addressList, resultSet);
+        DBUtils.closeConnection(resultSet, stmt, dbCon);
+
+        return addressList;
+    }
+
+    @Override
+    public List<Address> findMatcingAddressList(Connection connection, String searchTerm) throws SQLException {
+        List<Address> addressList = new ArrayList<>();
+        String query = "select * from address " +
+                " where firstname like ? " +
+                " or lastname like ? ";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setString(1, searchTerm + "%");
+        stmt.setString(2, searchTerm + "%");
+
+        ResultSet resultSet = stmt.executeQuery();
+        parseResultSet(addressList, resultSet);
+        DBUtils.closeConnection(resultSet, stmt, connection);
+
+        return addressList;
+    }
+
+    private void parseResultSet(List<Address> addressList, ResultSet resultSet) throws SQLException {
         while (resultSet.next()) {
             Address address = new Address();
             address.setUuid(resultSet.getString("UUID"));
@@ -79,8 +103,6 @@ public class AddressDAOImpl implements AddressDAO {
             address.setEmail(resultSet.getString("EMAIL"));
             addressList.add(address);
         }
-        DBUtils.closeConnection(resultSet, stmt, dbCon);
-        return addressList;
     }
 
 }

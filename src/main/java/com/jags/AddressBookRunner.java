@@ -100,6 +100,11 @@ public class AddressBookRunner {
 
     private List<Address> findAddressMatchList(String searchString) {
         //return addressList.stream().filter(addr -> (addr.matchName(searchString) || addr.matchEmail(searchString) || addr.matchPhone(searchString))).collect(Collectors.toList());
+        try {
+            return addressDAO.findMatcingAddressList(DBUtils.createClosableConnection(), searchString);
+        } catch (SQLException e) {
+            LOG.error("Unable to search in the database with given search string: " + searchString, e);
+        }
         return null;
     }
 
