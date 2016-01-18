@@ -4,6 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by JParvathaneni on 1/18/16.
@@ -35,7 +37,7 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public void insertData(Connection dbCon, Address address) throws SQLException {
+    public void createAddress(Connection dbCon, Address address) throws SQLException {
 
         String pSQL = "INSERT INTO ADDRESS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt1 = dbCon.prepareStatement(pSQL);
@@ -58,16 +60,27 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public void readData(Connection dbCon) throws SQLException {
+    public List<Address> getAllAddressList(Connection dbCon) throws SQLException {
+        List<Address> addressList = new ArrayList<>();
         String sql = "select UUID, FIRSTNAME, LASTNAME, ADDRESS1, ADDRESS2, CITY, STATE, ZIP, PHONE, EMAIL from address";
         Statement stmt = dbCon.createStatement();
         ResultSet resultSet = stmt.executeQuery(sql);
         while (resultSet.next()) {
-            String uuid = resultSet.getString("UUID");
-            String firstname = resultSet.getString("FIRSTNAME");
-            LOG.debug(uuid + "  - " + firstname);
+            Address address = new Address();
+            address.setUuid(resultSet.getString("UUID"));
+            address.setFirstName(resultSet.getString("FIRSTNAME"));
+            address.setLastName(resultSet.getString("LASTNAME"));
+            address.setLine1(resultSet.getString("ADDRESS1"));
+            address.setLine2(resultSet.getString("ADDRESS2"));
+            address.setCity(resultSet.getString("CITY"));
+            address.setState(resultSet.getString("STATE"));
+            address.setZip(resultSet.getString("ZIP"));
+            address.setPhoneNumber(resultSet.getString("PHONE"));
+            address.setEmail(resultSet.getString("EMAIL"));
+            addressList.add(address);
         }
         DBUtils.closeConnection(resultSet, stmt, dbCon);
+        return addressList;
     }
 
 }

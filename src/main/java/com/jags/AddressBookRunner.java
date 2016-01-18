@@ -5,10 +5,8 @@ import org.apache.commons.logging.LogFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Created by jparvathaneni on 12/20/15.
@@ -17,7 +15,6 @@ public class AddressBookRunner {
 
     private static final Log LOG = LogFactory.getLog(AddressBookRunner.class);
 
-    private List<Address> addressList = new ArrayList<>();
     private AddressDAO addressDAO;
 
     MenuHandler menuHandler = new MenuHandlerConsoleImpl();
@@ -53,11 +50,10 @@ public class AddressBookRunner {
             switch (choice) {
                 case 1:
                     Address address = addressHandler.read();
-                    addressList.add(address);
                     try {
-                        addressDAO.insertData(DBUtils.createClosableConnection(), address);
+                        addressDAO.createAddress(DBUtils.createClosableConnection(), address);
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        LOG.error("Error inserting address into database: " + address, e);
                     }
                     break;
                 case 2:
@@ -88,7 +84,7 @@ public class AddressBookRunner {
                 case 5:
                     displayAllAddrs();
                     try {
-                        addressDAO.readData(DBUtils.createClosableConnection());
+                        addressDAO.getAllAddressList(DBUtils.createClosableConnection());
 
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -103,14 +99,17 @@ public class AddressBookRunner {
     }
 
     private List<Address> findAddressMatchList(String searchString) {
-        return addressList.stream().filter(addr -> (addr.matchName(searchString) || addr.matchEmail(searchString) || addr.matchPhone(searchString))).collect(Collectors.toList());
+        //return addressList.stream().filter(addr -> (addr.matchName(searchString) || addr.matchEmail(searchString) || addr.matchPhone(searchString))).collect(Collectors.toList());
+        return null;
     }
 
     private Optional<Address> findAddressMatch(String UUIDToMatch) {
-        return addressList.stream().filter(addr -> addr.matchUUID(UUIDToMatch)).findFirst();
+        //return addressList.stream().filter(addr -> addr.matchUUID(UUIDToMatch)).findFirst();
+        return null;
     }
 
     private void deleteUUID(String UUIDToDelete) {
+/*
         Optional<Address> address = addressList.stream().filter(addr -> addr.matchUUID(UUIDToDelete)).findFirst();
 
         if (address.isPresent()) {
@@ -118,27 +117,29 @@ public class AddressBookRunner {
         } else {
             System.err.println("No Address found with UUID to delete.");
         }
+*/
     }
 
     private void displayAllAddrs() {
-        if (addressList.isEmpty()) {
-            System.out.println("No addresses in the list");
-        } else {
-            for (Address dis : addressList) {
-                System.out.println(dis);
+        try {
+            List<Address> allAddressList = addressDAO.getAllAddressList(DBUtils.createClosableConnection());
+            for(Address address : allAddressList){
+                System.out.println(address);
             }
+        } catch (SQLException e) {
+            LOG.error("Error reading address information from database", e);
         }
     }
 
     private void replaceEditTerm(Address addrToReplace, String UUIDToEdit) {
-        int indexToEdit = 0;
+       /* int indexToEdit = 0;
         for (Address address : addressList) {
             if (address.getUuid().equalsIgnoreCase(UUIDToEdit)) {
                 indexToEdit = addressList.indexOf(address);
                 break;
             }
         }
-        addressList.set(indexToEdit, addrToReplace);
+        addressList.set(indexToEdit, addrToReplace);*/
     }
 
 
