@@ -13,18 +13,6 @@ public class AddressDAOImpl implements AddressDAO {
     private static final Log LOG = LogFactory.getLog(AddressHandlerConsoleImpl.class);
 
     @Override
-    public Connection createConnection() {
-        try {
-            String dbURL = "jdbc:h2:~/Development/AddressBook/Address";
-            Class.forName("org.h2.Driver");
-            return DriverManager.getConnection(dbURL, "sa", "");
-        } catch (Exception except) {
-            LOG.error("exception creating db connection", except);
-        }
-        return null;
-    }
-
-    @Override
     public void createTable(Connection dbCon) throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS ADDRESS" +
                 "(" +
@@ -43,7 +31,7 @@ public class AddressDAOImpl implements AddressDAO {
         Statement statement = dbCon.createStatement();
         statement.execute(sql);
 
-        statement.close();
+        DBUtils.closeConnection(statement, dbCon);
     }
 
     @Override
@@ -66,21 +54,20 @@ public class AddressDAOImpl implements AddressDAO {
 
         System.out.println("************ Addressed saved to file ************");
 
-        stmt1.close();
+        DBUtils.closeConnection(stmt1, dbCon);
     }
 
     @Override
     public void readData(Connection dbCon) throws SQLException {
-            String sql = "select UUID, FIRSTNAME, LASTNAME, ADDRESS1, ADDRESS2, CITY, STATE, ZIP, PHONE, EMAIL from address";
-            Statement stmt = dbCon.createStatement();
-            ResultSet resultSet = stmt.executeQuery(sql);
-            while(resultSet.next()){
-                String uuid = resultSet.getString("UUID");
-                String firstname = resultSet.getString("FIRSTNAME");
-                LOG.debug(uuid + "  - " + firstname);
-            }
-            resultSet.close();
-            stmt.close();
+        String sql = "select UUID, FIRSTNAME, LASTNAME, ADDRESS1, ADDRESS2, CITY, STATE, ZIP, PHONE, EMAIL from address";
+        Statement stmt = dbCon.createStatement();
+        ResultSet resultSet = stmt.executeQuery(sql);
+        while (resultSet.next()) {
+            String uuid = resultSet.getString("UUID");
+            String firstname = resultSet.getString("FIRSTNAME");
+            LOG.debug(uuid + "  - " + firstname);
         }
+        DBUtils.closeConnection(resultSet, stmt, dbCon);
+    }
 
 }

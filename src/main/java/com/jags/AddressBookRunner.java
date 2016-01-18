@@ -18,19 +18,35 @@ public class AddressBookRunner {
     private static final Log LOG = LogFactory.getLog(AddressBookRunner.class);
 
     private List<Address> addressList = new ArrayList<>();
-    private AddressDAO addressDAO = new AddressDAOImpl();
-
+    private AddressDAO addressDAO;
 
     MenuHandler menuHandler = new MenuHandlerConsoleImpl();
     AddressHandler addressHandler = new AddressHandlerConsoleImpl();
 
-    public void run() {
+    public AddressBookRunner() {
+        this.addressDAO = new AddressDAOImpl();
+        Connection connection = DBUtils.createClosableConnection();
         try {
-            LOG.debug("Loading addresses from saved file...");
-            FileStoreHandler.loadSavedAddress();
-        } catch (Exception e) {
-            LOG.error("Exception reading saved addresses ", e);
+            addressDAO.createTable(connection);
+        } catch (SQLException e) {
+            LOG.fatal("Unable to create table, ", e);
+            System.exit(-1);
         }
+        this.attachShutDownHook();
+    }
+
+    public AddressBookRunner(AddressDAO addressDAO, Connection connection) {
+        this.addressDAO = new AddressDAOImpl();
+        try {
+            addressDAO.createTable(DBUtils.createClosableConnection());
+        } catch (SQLException e) {
+            LOG.fatal("Unable to create table, ", e);
+            System.exit(-1);
+        }
+        this.attachShutDownHook();
+    }
+
+    public void run() {
         int choice = menuHandler.printMenuAndReadChoice();
         while (choice > 0 && choice < 6) {
 
@@ -39,7 +55,7 @@ public class AddressBookRunner {
                     Address address = addressHandler.read();
                     addressList.add(address);
                     try {
-                        addressDAO.insertData(addressDAO.createConnection(), address);
+                        addressDAO.insertData(DBUtils.createClosableConnection(), address);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -72,7 +88,7 @@ public class AddressBookRunner {
                 case 5:
                     displayAllAddrs();
                     try {
-                        addressDAO.readData(addressDAO.createConnection());
+                        addressDAO.readData(DBUtils.createClosableConnection());
 
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -131,8 +147,7 @@ public class AddressBookRunner {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                LOG.info("Saving the address to file on Shutdown...");
-                FileStoreHandler.saveAddrsToFile(addressList);
+                //Any cleanup stuff...
             }
         });
         LOG.debug("Shutdown hook attached successfully...");
@@ -140,14 +155,6 @@ public class AddressBookRunner {
 
     public static void main(String[] args) throws SQLException {
         AddressBookRunner addressBookRunner = new AddressBookRunner();
-        AddressDAO addressDAO = new AddressDAOImpl();
-        Connection connection = addressDAO.createConnection();
-        try {
-            addressDAO.createTable(connection);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        addressBookRunner.attachShutDownHook();
         addressBookRunner.run();
 
     }
