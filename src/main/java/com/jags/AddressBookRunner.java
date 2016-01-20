@@ -110,7 +110,11 @@ public class AddressBookRunner {
 
     private Optional<Address> findAddressMatch(String UUIDToMatch) {
         //return addressList.stream().filter(addr -> addr.matchUUID(UUIDToMatch)).findFirst();
-        return null;
+        try {
+            return addressDAO.findMatchingAddress(DBUtils.createClosableConnection(), UUIDToMatch);
+        } catch (SQLException e) {
+            LOG.error("Unable to find an address with the given UUID: " + UUIDToMatch, e);
+        }
     }
 
     private void deleteUUID(String UUIDToDelete) {

@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by JParvathaneni on 1/18/16.
@@ -57,6 +58,24 @@ public class AddressDAOImpl implements AddressDAO {
         System.out.println("************ Addressed saved to file ************");
 
         DBUtils.closeConnection(stmt1, dbCon);
+    }
+
+    @Override
+    public Optional<Address> findMatchingAddress(Connection connection, String UUIDToMatch) throws SQLException {
+        List<Address> addressList = new ArrayList<>();
+        String query = "select * from address " +
+                " where UUID = ? ";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setString(1, UUIDToMatch);
+
+        ResultSet resultSet = stmt.executeQuery();
+        parseResultSet(addressList, resultSet);
+        DBUtils.closeConnection(resultSet, stmt, connection);
+
+        Optional<Address> address = addressList.stream().findFirst();
+
+        return address;
+
     }
 
     @Override
