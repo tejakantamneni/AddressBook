@@ -61,6 +61,42 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
+    public void replaceEditTerm(Connection connection, Address addrToReplace, String UUIDToEdit) throws SQLException {
+        //Address address = new Address();
+        String sql = "UPDATE Address SET " +
+                " FIRSTNAME = ? ," +
+                " LASTNAME = ? ," +
+                " ADDRESS1 = ? ," +
+                " ADDRESS2 = ? ," +
+                " CITY = ? ," +
+                " STATE = ? ," +
+                " ZIP = ? ," +
+                " PHONE = ? ," +
+                " EMAIL = ? " +
+                " WHERE UUID = ? ";
+
+        PreparedStatement stmt = connection.prepareStatement(sql);
+
+        stmt.setString(1, addrToReplace.getFirstName());
+        stmt.setString(2, addrToReplace.getLastName());
+        stmt.setString(3, addrToReplace.getLine1());
+        stmt.setString(4, addrToReplace.getLine2());
+        stmt.setString(5, addrToReplace.getCity());
+        stmt.setString(6, addrToReplace.getState());
+        stmt.setString(7, addrToReplace.getZip());
+        stmt.setString(8, addrToReplace.getPhoneNumber());
+        stmt.setString(9, addrToReplace.getEmail());
+        stmt.setString(10, UUIDToEdit);
+
+        stmt.execute();
+
+        System.out.println("Address updated with new values");
+
+        DBUtils.closeConnection(stmt, connection);
+
+    }
+
+    @Override
     public Optional<Address> findMatchingAddress(Connection connection, String UUIDToMatch) throws SQLException {
         List<Address> addressList = new ArrayList<>();
         String query = "select * from address " +

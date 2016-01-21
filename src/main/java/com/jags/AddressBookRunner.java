@@ -115,6 +115,7 @@ public class AddressBookRunner {
         } catch (SQLException e) {
             LOG.error("Unable to find an address with the given UUID: " + UUIDToMatch, e);
         }
+        return null;
     }
 
     private void deleteUUID(String UUIDToDelete) {
@@ -149,6 +150,11 @@ public class AddressBookRunner {
             }
         }
         addressList.set(indexToEdit, addrToReplace);*/
+        try {
+            addressDAO.replaceEditTerm(DBUtils.createClosableConnection(), addrToReplace, UUIDToEdit);
+        } catch (SQLException e) {
+            LOG.error("Unable to find address to match UUID: " + UUIDToEdit, e);
+        }
     }
 
 

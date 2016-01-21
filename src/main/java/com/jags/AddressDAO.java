@@ -19,4 +19,6 @@ public interface AddressDAO {
 
     Optional<Address> findMatchingAddress(Connection connection, String UUIDToMatch) throws SQLException;
 
+    void replaceEditTerm(Connection connection, Address addrToReplace, String UUIDToEdit) throws SQLException;
+
 }
