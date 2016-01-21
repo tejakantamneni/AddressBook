@@ -1,5 +1,6 @@
 package com.jags;
 
+import jdk.nashorn.internal.runtime.options.Option;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -118,7 +119,7 @@ public class AddressBookRunner {
         } catch (SQLException e) {
             LOG.error("Unable to find an address with the given UUID: " + UUIDToMatch, e);
         }
-        return null;
+        return Optional.empty();
     }
 
      public void attachShutDownHook() {
