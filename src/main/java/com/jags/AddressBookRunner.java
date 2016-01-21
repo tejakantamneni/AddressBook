@@ -72,20 +72,26 @@ public class AddressBookRunner {
                         System.out.println("Enter the new address details:");
                         Address editAddress = addressHandler.readEdit(printMatchedAddress.get());
                         LOG.debug("editAddress = " + editAddress);
-                        replaceEditTerm(editAddress, editUUID);
+                        try {
+                            addressDAO.replaceEditTerm(DBUtils.createClosableConnection(), editAddress, editUUID);
+                        } catch (SQLException e) {
+                            LOG.error("Unable to find address to match UUID: " + editUUID, e);
+                        }
                     } else {
                         System.out.println("No address found to match with given UUID, please check again.");
                     }
                     break;
                 case 4:
                     String addressDelete = addressHandler.readDeleteUUID();
-                    deleteUUID(addressDelete);
+                    try {
+                        addressDAO.deleteAddress(DBUtils.createClosableConnection(), addressDelete );
+                    } catch (SQLException e) {
+                        LOG.error("Unable find the address with the UUID: " + addressDelete, e);
+                    }
                     break;
                 case 5:
-                    displayAllAddrs();
                     try {
                         addressDAO.getAllAddressList(DBUtils.createClosableConnection());
-
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -93,15 +99,13 @@ public class AddressBookRunner {
                 default:
                     break;
             }
-
             choice = menuHandler.printMenuAndReadChoice();
         }
     }
 
     private List<Address> findAddressMatchList(String searchString) {
-        //return addressList.stream().filter(addr -> (addr.matchName(searchString) || addr.matchEmail(searchString) || addr.matchPhone(searchString))).collect(Collectors.toList());
         try {
-            return addressDAO.findMatcingAddressList(DBUtils.createClosableConnection(), searchString);
+            return addressDAO.findMatchingAddressList(DBUtils.createClosableConnection(), searchString);
         } catch (Exception e) {
             LOG.error("Unable to search in the database with given search string: " + searchString, e);
         }
@@ -109,7 +113,6 @@ public class AddressBookRunner {
     }
 
     private Optional<Address> findAddressMatch(String UUIDToMatch) {
-        //return addressList.stream().filter(addr -> addr.matchUUID(UUIDToMatch)).findFirst();
         try {
             return addressDAO.findMatchingAddress(DBUtils.createClosableConnection(), UUIDToMatch);
         } catch (SQLException e) {
@@ -118,47 +121,7 @@ public class AddressBookRunner {
         return null;
     }
 
-    private void deleteUUID(String UUIDToDelete) {
-/*
-        Optional<Address> address = addressList.stream().filter(addr -> addr.matchUUID(UUIDToDelete)).findFirst();
-
-        if (address.isPresent()) {
-            addressList.remove(address.get());
-        } else {
-            System.err.println("No Address found with UUID to delete.");
-        }
-*/
-    }
-
-    private void displayAllAddrs() {
-        try {
-            List<Address> allAddressList = addressDAO.getAllAddressList(DBUtils.createClosableConnection());
-            for(Address address : allAddressList){
-                System.out.println(address);
-            }
-        } catch (SQLException e) {
-            LOG.error("Error reading address information from database", e);
-        }
-    }
-
-    private void replaceEditTerm(Address addrToReplace, String UUIDToEdit) {
-       /* int indexToEdit = 0;
-        for (Address address : addressList) {
-            if (address.getUuid().equalsIgnoreCase(UUIDToEdit)) {
-                indexToEdit = addressList.indexOf(address);
-                break;
-            }
-        }
-        addressList.set(indexToEdit, addrToReplace);*/
-        try {
-            addressDAO.replaceEditTerm(DBUtils.createClosableConnection(), addrToReplace, UUIDToEdit);
-        } catch (SQLException e) {
-            LOG.error("Unable to find address to match UUID: " + UUIDToEdit, e);
-        }
-    }
-
-
-    public void attachShutDownHook() {
+     public void attachShutDownHook() {
         LOG.debug("Attempting to attach a Shutdown hook");
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override

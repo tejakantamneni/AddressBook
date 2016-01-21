@@ -61,6 +61,21 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
+    public void deleteAddress(Connection connection, String UUIDtoDelete) throws SQLException {
+        String sql = "DELETE FROM ADDRESS WHERE UUID = ?";
+
+        PreparedStatement stmt = connection.prepareStatement(sql);
+
+        stmt.setString(1, UUIDtoDelete);
+
+        stmt.execute();
+
+        System.out.println("Address successfully deleted");
+
+        DBUtils.closeConnection(stmt, connection);
+    }
+
+    @Override
     public void replaceEditTerm(Connection connection, Address addrToReplace, String UUIDToEdit) throws SQLException {
         //Address address = new Address();
         String sql = "UPDATE Address SET " +
@@ -127,7 +142,7 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public List<Address> findMatcingAddressList(Connection connection, String searchTerm) throws SQLException {
+    public List<Address> findMatchingAddressList(Connection connection, String searchTerm) throws SQLException {
         List<Address> addressList = new ArrayList<>();
         String query = "select * from address " +
                 " where firstname like ? " +
