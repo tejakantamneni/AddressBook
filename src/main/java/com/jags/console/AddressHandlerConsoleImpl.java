@@ -1,4 +1,6 @@
-package com.jags;
+package com.jags.console;
+
+import com.jags.model.Address;
 
 import java.util.List;
 import java.util.Scanner;

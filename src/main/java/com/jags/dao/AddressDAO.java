@@ -1,4 +1,6 @@
-package com.jags;
+package com.jags.dao;
+
+import com.jags.model.Address;
 
 import java.sql.Connection;
 import java.sql.SQLException;

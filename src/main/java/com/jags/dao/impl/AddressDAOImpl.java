@@ -1,5 +1,9 @@
-package com.jags;
+package com.jags.dao.impl;
 
+import com.jags.console.AddressHandlerConsoleImpl;
+import com.jags.console.DBUtils;
+import com.jags.dao.AddressDAO;
+import com.jags.model.Address;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

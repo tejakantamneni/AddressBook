@@ -1,5 +1,6 @@
-package com.jags;
+package com.jags.console;
 
+import com.jags.model.Address;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

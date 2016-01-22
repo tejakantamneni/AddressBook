@@ -1,4 +1,4 @@
-package com.jags;
+package com.jags.model;
 
 /**
  * Created by jparvathaneni on 12/20/15.

@@ -6,7 +6,7 @@
   <groupId>com.jags</groupId>
   <artifactId>addressbook</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>addressbook</name>
   <url>http://maven.apache.org</url>
@@ -16,6 +16,20 @@
   </properties>
 
   <dependencies>
+
+      <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>javax.servlet-api</artifactId>
+          <version>3.1.0</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>jsp-api</artifactId>
+          <version>2.0</version>
+          <scope>provided</scope>
+      </dependency>
+
 
       <dependency>
           <groupId>com.h2database</groupId>
@@ -63,6 +77,13 @@
           </resource>
       </resources>
       <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-war-plugin</artifactId>
+              <configuration>
+                  <webXml>src\main\webapp\WEB-INF\web.xml</webXml>
+              </configuration>
+          </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

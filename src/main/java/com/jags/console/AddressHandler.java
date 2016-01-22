@@ -1,6 +1,7 @@
-package com.jags;
+package com.jags.console;
 
-import java.sql.Connection;
+import com.jags.model.Address;
+
 import java.util.List;
 
 /**

@@ -1,4 +1,4 @@
-package com.jags;
+package com.jags.console;
 
 import java.util.Scanner;
 
