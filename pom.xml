@@ -16,6 +16,12 @@
   </properties>
 
   <dependencies>
+      <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>jstl</artifactId>
+          <version>1.2</version>
+      </dependency>
+
 
       <dependency>
           <groupId>javax.servlet</groupId>
@@ -30,11 +36,10 @@
           <scope>provided</scope>
       </dependency>
 
-
       <dependency>
-          <groupId>com.h2database</groupId>
-          <artifactId>h2</artifactId>
-          <version>1.4.190</version>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>5.1.38</version>
       </dependency>
 
       <dependency>

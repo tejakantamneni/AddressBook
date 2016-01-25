@@ -13,9 +13,9 @@ public class DBUtils {
 
     public static final Connection createClosableConnection() {
         try {
-            String dbURL = "jdbc:h2:~/Development/AddressBook/Address";
-            Class.forName("org.h2.Driver");
-            return DriverManager.getConnection(dbURL, "sa", "");
+            String dbURL = "jdbc:mysql://localhost:3306/address_book";
+            Class.forName("com.mysql.jdbc.Driver");
+            return DriverManager.getConnection(dbURL, "root", "");
         } catch (Exception except) {
             LOG.error("exception creating db connection", except);
         }
