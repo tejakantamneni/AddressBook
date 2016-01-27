@@ -7,6 +7,16 @@ public class User {
 
     private String username, password, firstName, lastName;
 
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    private int userID;
+
     public String getUsername() {
         return username;
     }

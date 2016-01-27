@@ -5,7 +5,8 @@ package com.jags.model;
  */
 public class Address implements java.io.Serializable {
 
-    private String uuid,firstName, lastName, line1, line2, city, state, zip, phoneNumber, email;
+    private String firstName, lastName, line1, line2, city, state, zip, phoneNumber, email;
+    private int addressId, userId;
 
     public boolean matchName(String name){
         return name != null && (firstName.startsWith(name) || lastName.startsWith(name));
@@ -16,12 +17,11 @@ public class Address implements java.io.Serializable {
     public boolean matchPhone(String phone){
         return phone != null && this.phoneNumber.equalsIgnoreCase(phone);
     }
-    public boolean matchUUID(String uuid) {return uuid != null && this.uuid.equals(uuid);}
 
     @Override
     public String toString() {
         return "Address{" +
-                "uuid='" + uuid + '\'' +
+                "id='" + addressId + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", line1='" + line1 + '\'' +
@@ -34,12 +34,20 @@ public class Address implements java.io.Serializable {
                 '}';
     }
 
-    public String getUuid() {
-        return uuid;
+    public int getAddressId() {
+        return addressId;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {

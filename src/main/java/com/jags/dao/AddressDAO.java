@@ -11,11 +11,11 @@ import java.util.Optional;
  * Created by JParvathaneni on 1/18/16.
  */
 public interface AddressDAO {
-    void createTable(Connection connection) throws SQLException;
-
     void createAddress(Connection connection, Address address) throws SQLException;
 
     List<Address> getAllAddressList(Connection connection) throws SQLException;
+
+    List<Address> getAllAddressList(Connection connection, int UserID) throws SQLException;
 
     List<Address> findMatchingAddressList(Connection connection, String searchTerm) throws SQLException;
 

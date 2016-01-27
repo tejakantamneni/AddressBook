@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class UserDAOImpl implements UserDAO {
     @Override
     public User authenticate(Connection connection, String username, String password) throws SQLException {
-        String QUERY = "SELECT FIRST_NAME, LAST_NAME FROM USERS WHERE USERNAME = ? AND PASSWORD = ?";
+        String QUERY = "SELECT FIRST_NAME, LAST_NAME, user_id FROM USERS WHERE USERNAME = ? AND PASSWORD = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY);
         preparedStatement.setString(1, username);
         preparedStatement.setString(2, password);
@@ -26,6 +26,7 @@ public class UserDAOImpl implements UserDAO {
             user = new User();
             user.setFirstName(resultSet.getString("FIRST_NAME"));
             user.setLastName(resultSet.getString("LAST_NAME"));
+            user.setUserID(resultSet.getInt("USER_ID"));
             user.setUsername(username);
             user.setPassword(password);
         }

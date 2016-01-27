@@ -1,6 +1,5 @@
 package com.jags.dao.impl;
 
-import com.jags.console.AddressHandlerConsoleImpl;
 import com.jags.console.DBUtils;
 import com.jags.dao.AddressDAO;
 import com.jags.model.Address;
@@ -17,45 +16,37 @@ import java.util.Optional;
  */
 public class AddressDAOImpl implements AddressDAO {
 
-    private static final Log LOG = LogFactory.getLog(AddressHandlerConsoleImpl.class);
+    private static final Log LOG = LogFactory.getLog(AddressDAOImpl.class);
+
 
     @Override
-    public void createTable(Connection dbCon) throws SQLException {
-        String sql = "CREATE TABLE IF NOT EXISTS ADDRESS" +
-                "(" +
-                "UUID varchar(255)," +
-                "FirstName varchar(255)," +
-                "LastName varchar(255)," +
-                "Address1 varchar(255)," +
-                "Address2 varchar(255)," +
-                "City varchar(255)," +
-                "State varchar(255)," +
-                "Zip varchar(255)," +
-                "Phone varchar(255)," +
-                "eMail varchar(255)" +
-                ")";
+    public List<Address> getAllAddressList(Connection dbCon, int userid) throws SQLException {
+        List<Address> addressList = new ArrayList<>();
+        String sql = "select ADDRESS_ID, FIRST_NAME, LAST_NAME, LINE1, LINE2, CITY, STATE, ZIP, EMAIL, PHONE, USER_ID from ADDRESS WHERE USER_ID = ?";
+        PreparedStatement stmt = dbCon.prepareStatement(sql);
+        ResultSet resultSet = stmt.executeQuery(sql);
+        parseResultSet(addressList, resultSet);
+        DBUtils.closeConnection(resultSet, stmt, dbCon);
 
-        Statement statement = dbCon.createStatement();
-        statement.execute(sql);
-
-        DBUtils.closeConnection(statement, dbCon);
+        return addressList;
     }
+
 
     @Override
     public void createAddress(Connection dbCon, Address address) throws SQLException {
 
-        String pSQL = "INSERT INTO ADDRESS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String pSQL = "INSERT INTO ADDRESS (FIRST_NAME, LAST_NAME, LINE1, LINE2, CITY,STATE,ZIP,PHONE,EMAIL,USER_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt1 = dbCon.prepareStatement(pSQL);
-        stmt1.setString(1, address.getUuid());
-        stmt1.setString(2, address.getFirstName());
-        stmt1.setString(3, address.getLastName());
-        stmt1.setString(4, address.getLine1());
-        stmt1.setString(5, address.getLine2());
-        stmt1.setString(6, address.getCity());
-        stmt1.setString(7, address.getState());
-        stmt1.setString(8, address.getZip());
-        stmt1.setString(9, address.getPhoneNumber());
-        stmt1.setString(10, address.getEmail());
+        stmt1.setString(1, address.getFirstName());
+        stmt1.setString(2, address.getLastName());
+        stmt1.setString(3, address.getLine1());
+        stmt1.setString(4, address.getLine2());
+        stmt1.setString(5, address.getCity());
+        stmt1.setString(6, address.getState());
+        stmt1.setString(7, address.getZip());
+        stmt1.setString(8, address.getPhoneNumber());
+        stmt1.setString(9, address.getEmail());
+        stmt1.setInt(10, address.getUserId());
 
         stmt1.execute();
 
@@ -165,16 +156,17 @@ public class AddressDAOImpl implements AddressDAO {
     private void parseResultSet(List<Address> addressList, ResultSet resultSet) throws SQLException {
         while (resultSet.next()) {
             Address address = new Address();
-            address.setUuid(resultSet.getString("UUID"));
-            address.setFirstName(resultSet.getString("FIRSTNAME"));
-            address.setLastName(resultSet.getString("LASTNAME"));
-            address.setLine1(resultSet.getString("ADDRESS1"));
-            address.setLine2(resultSet.getString("ADDRESS2"));
+            address.setAddressId(resultSet.getInt("Address_ID"));
+            address.setFirstName(resultSet.getString("FIRST_NAME"));
+            address.setLastName(resultSet.getString("LAST_NAME"));
+            address.setLine1(resultSet.getString("LINE1"));
+            address.setLine2(resultSet.getString("LINE2"));
             address.setCity(resultSet.getString("CITY"));
             address.setState(resultSet.getString("STATE"));
             address.setZip(resultSet.getString("ZIP"));
             address.setPhoneNumber(resultSet.getString("PHONE"));
             address.setEmail(resultSet.getString("EMAIL"));
+            address.setUserId(resultSet.getInt("USER_ID"));
             addressList.add(address);
         }
     }
