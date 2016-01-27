@@ -18,6 +18,9 @@ public class Address implements java.io.Serializable {
         return phone != null && this.phoneNumber.equalsIgnoreCase(phone);
     }
 
+    public String getDisplayName(){
+        return  new StringBuffer(this.getFirstName()).append(", ").append(this.getLastName()).toString();
+    }
     @Override
     public String toString() {
         return "Address{" +

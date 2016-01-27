@@ -1,6 +1,6 @@
 package com.jags.web.servlet;
 
-import com.jags.console.DBUtils;
+import com.jags.dao.utils.DBUtils;
 import com.jags.dao.UserDAO;
 import com.jags.dao.impl.UserDAOImpl;
 import com.jags.model.User;

@@ -1,6 +1,6 @@
 package com.jags.web.servlet;
 
-import com.jags.console.DBUtils;
+import com.jags.dao.utils.DBUtils;
 import com.jags.dao.AddressDAO;
 import com.jags.dao.impl.AddressDAOImpl;
 import com.jags.model.Address;

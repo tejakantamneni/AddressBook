@@ -232,7 +232,7 @@ org.h2.message.DbException: General error: "java.lang.IllegalStateException: The
 	at org.h2.Driver.connect(Driver.java:72)
 	at java.sql.DriverManager.getConnection(DriverManager.java:664)
 	at java.sql.DriverManager.getConnection(DriverManager.java:247)
-	at com.jags.console.DBUtils.createClosableConnection(DBUtils.java:18)
+	at com.jags.dao.utils.DBUtils.createClosableConnection(DBUtils.java:18)
 	at com.jags.console.AddressBookRunner.<init>(AddressBookRunner.java:25)
 	at com.jags.console.AddressBookRunner.main(AddressBookRunner.java:173)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)

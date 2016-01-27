@@ -1,4 +1,4 @@
-package com.jags.console;
+package com.jags.dao.utils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

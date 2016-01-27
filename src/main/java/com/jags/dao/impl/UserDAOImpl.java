@@ -1,6 +1,6 @@
 package com.jags.dao.impl;
 
-import com.jags.console.DBUtils;
+import com.jags.dao.utils.DBUtils;
 import com.jags.dao.UserDAO;
 import com.jags.model.User;
 

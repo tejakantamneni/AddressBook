@@ -1,4 +1,5 @@
-<%--
+<%@ page import="com.jags.model.Address" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: JParvathaneni
   Date: 1/25/16
@@ -15,13 +16,20 @@
     <div style="text-align: center">
 
         <h2>List of Addresses</h2>
+        <%
+            List<Address> userAddressList = (List<Address>) request.getAttribute("userAddressList");
+            if(userAddressList == null || userAddressList.isEmpty()){
+        %>
+            <h4>No addresses available.</h4>
+        <%
+            }else{
+        %>
 
         <table style="width:75%" align="center" border="2">
             <thead>
             <tr>
-                <th>Sl. No.</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>SNo.</th>
+                <th>Name</th>
                 <th>Address Line 1</th>
                 <th>Address Line 2</th>
                 <th>City</th>
@@ -32,6 +40,43 @@
             </tr>
             </thead>
             <tbody>
+            <%
+                for(Address address : userAddressList){
+            %>
+                <tr>
+                    <td>
+                        <input type="CHECKBOX" name="selAddressList" value="<%=address.getAddressId()%>">
+                    </td>
+                    <td>
+                        <a href="#"> <%=address.getDisplayName()%></a>
+                    </td>
+                    <td>
+                        <%=address.getLine1()%>
+                    </td>
+                    <td>
+                        <%=address.getLine2()%>
+                    </td>
+                    <td>
+                        <%=address.getCity()%>
+                    </td>
+                    <td>
+                        <%=address.getState()%>
+                    </td>
+                    <td>
+                        <%=address.getZip()%>
+                    </td>
+                    <td>
+                        <%=address.getEmail()%>
+                    </td>
+                    <td>
+                        <%=address.getPhoneNumber()%>
+                    </td>
+                </tr>
+            <%
+                }
+                }
+            %>
+
 
             </tbody>
         </table>

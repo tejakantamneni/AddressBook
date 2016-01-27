@@ -1,3 +1,10 @@
 
 --users
 INSERT  INTO users (username, password, First_name, last_name) VALUEs ('su', 'pwd', 'super', 'admin' )
+
+
+-ADDRESS
+
+INSERT INTO ADDRESS (USER_ID, FIRST_NAME, LAST_NAME, LINE1, LINE2, CITY, STATE, ZIP, EMAIL, PHONE)
+    VALUES (1, 'TEJA', 'PARVATHANENI', '10879 CORAL SHORES DR', 'UNIT 103', 'JACKSONVILLE', 'FL', '32256', 'PTEJA@HOTMAIL.COM', '850-567-5646')
+

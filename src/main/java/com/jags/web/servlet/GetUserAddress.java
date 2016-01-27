@@ -1,8 +1,9 @@
 package com.jags.web.servlet;
 
-import com.jags.console.DBUtils;
+import com.jags.dao.utils.DBUtils;
 import com.jags.dao.AddressDAO;
 import com.jags.dao.impl.AddressDAOImpl;
+import com.jags.model.Address;
 import com.jags.model.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,9 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by JParvathaneni on 1/26/16.
@@ -29,9 +30,11 @@ public class GetUserAddress extends HttpServlet {
         User loggedInUser = WebUtils.getLoggedInUser(req);
         if (loggedInUser != null) {
             try {
-                addressDAO.getAllAddressList(DBUtils.createClosableConnection(), loggedInUser.getUserID());
+                List<Address> userAddressList = addressDAO.getAllAddressList(DBUtils.createClosableConnection(), loggedInUser.getUserID());
+                req.setAttribute("userAddressList", userAddressList);
+                req.getRequestDispatcher("/addressdisplay/addresslist.jsp").forward(req, resp);
             } catch (SQLException e) {
-                LOG.error("Unable to load address list for user : " + loggedInUser.getUsername());
+                LOG.error("Unable to load address list for user : " + loggedInUser.getUsername(), e);
             }
         } else {
             req.setAttribute("errorMessage", "Please login to access your addresses.");

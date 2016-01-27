@@ -1,6 +1,6 @@
 package com.jags.dao.impl;
 
-import com.jags.console.DBUtils;
+import com.jags.dao.utils.DBUtils;
 import com.jags.dao.AddressDAO;
 import com.jags.model.Address;
 import org.apache.commons.logging.Log;
@@ -22,9 +22,10 @@ public class AddressDAOImpl implements AddressDAO {
     @Override
     public List<Address> getAllAddressList(Connection dbCon, int userid) throws SQLException {
         List<Address> addressList = new ArrayList<>();
-        String sql = "select ADDRESS_ID, FIRST_NAME, LAST_NAME, LINE1, LINE2, CITY, STATE, ZIP, EMAIL, PHONE, USER_ID from ADDRESS WHERE USER_ID = ?";
+        String sql = "select ADDRESS_ID, FIRST_NAME, LAST_NAME, LINE1, LINE2, CITY, STATE, ZIP, EMAIL, PHONE, USER_ID from ADDRESS WHERE USER_ID = ? ";
         PreparedStatement stmt = dbCon.prepareStatement(sql);
-        ResultSet resultSet = stmt.executeQuery(sql);
+        stmt.setLong(1, userid);
+        ResultSet resultSet = stmt.executeQuery();
         parseResultSet(addressList, resultSet);
         DBUtils.closeConnection(resultSet, stmt, dbCon);
 
