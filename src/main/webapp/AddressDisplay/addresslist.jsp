@@ -24,7 +24,17 @@
         <%
             }else{
         %>
-
+        <table style="width:75%" align="center" border="0">
+            <tr align="right">
+                <td>
+                    <input type="button" name="btnAddAddress" value="Add Address"
+                           style="border:thick" align="right" onclick="openPage('adduseraddress/adduseraddress.jsp')"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            </table>
         <table style="width:75%" align="center" border="2">
             <thead>
             <tr>
@@ -77,11 +87,17 @@
                 }
             %>
 
-
             </tbody>
         </table>
 
     </div>
 </form>
+<script type="text/javascript">
+
+    function openPage(pageName){
+        window.location.href = pageName;
+    }
+
+</script>
 </body>
 </html>
