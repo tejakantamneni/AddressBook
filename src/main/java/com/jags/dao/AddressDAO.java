@@ -24,6 +24,6 @@ public interface AddressDAO {
 
     void replaceEditTerm(Connection connection, Address addrToReplace) throws SQLException;
 
-    void deleteAddress(Connection connection, String UUIDtoDelete) throws  SQLException;
+    void deleteAddress(Connection connection, String addressID) throws  SQLException;
 
 }

@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,12 +58,12 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public void deleteAddress(Connection connection, String UUIDtoDelete) throws SQLException {
-        String sql = "DELETE FROM ADDRESS WHERE UUID = ?";
+    public void deleteAddress(Connection connection, String addressId) throws SQLException {
+        String sql = "DELETE FROM ADDRESS WHERE ADDRESS_ID = ?";
 
         PreparedStatement stmt = connection.prepareStatement(sql);
 
-        stmt.setString(1, UUIDtoDelete);
+        stmt.setString(1, addressId);
 
         stmt.execute();
 

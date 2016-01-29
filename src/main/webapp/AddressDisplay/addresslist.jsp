@@ -12,7 +12,7 @@
     <title>List of Addresses</title>
 </head>
 <body>
-<form action="<%=config.getServletContext().getContextPath()%>\addressList" method="post">
+<form action="<%=config.getServletContext().getContextPath()%>\DeleteUserAddress" method="post">
     <div style="text-align: center">
 
         <h2>List of Addresses</h2>
@@ -20,24 +20,29 @@
             List<Address> userAddressList = (List<Address>) request.getAttribute("userAddressList");
             if(userAddressList == null || userAddressList.isEmpty()){
         %>
-            <h4>No addresses available.</h4>
+        <h4>No addresses available.</h4>
         <%
-            }else{
+        }else{
         %>
         <table style="width:75%" align="center" border="0">
             <tr align="right">
                 <td>
-                    <a href="<%=config.getServletContext().getContextPath()%>/adduseraddress/adduseraddress.jsp" style="padding: 8px; background-color: gray; border-bottom-color: black;border-right-color: black;border: 1px">Add Address</a>
-<%--
-                    <input type="button" name="btnAddAddress" value="Add Address"
-                           style="border:thick" align="right" onclick="openPage('adduseraddress/adduseraddress.jsp')"/>
---%>
+                    <input type="submit" name="btnDelAddress" value="Delete Address"
+                           style="border:thick" align="right">
+                </td>
+                <td>
+                    <a href="<%=config.getServletContext().getContextPath()%>/adduseraddress/adduseraddress.jsp"
+                       style="padding: 8px; background-color: gray; border-bottom-color: black;border-right-color: black;border: 1px">Add Address</a>
+                    <%--
+                                        <input type="button" name="btnAddAddress" value="Add Address"
+                                               style="border:thick" align="right" onclick="openPage('adduseraddress/adduseraddress.jsp')"/>
+                    --%>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">&nbsp;</td>
             </tr>
-            </table>
+        </table>
         <table style="width:75%" align="center" border="2">
             <thead>
             <tr>
@@ -56,37 +61,37 @@
             <%
                 for(Address address : userAddressList){
             %>
-                <tr>
-                    <td>
-                        <input type="CHECKBOX" name="selAddressList" value="<%=address.getAddressId()%>">
-                    </td>
-                    <td>
-                        <a href="<%=config.getServletContext().getContextPath()%>/EditAddress?id=<%=address.getAddressId()%>"> <%=address.getDisplayName()%></a>
-                    </td>
-                    <td>
-                        <%=address.getLine1()%>
-                    </td>
-                    <td>
-                        <%=address.getLine2()%>
-                    </td>
-                    <td>
-                        <%=address.getCity()%>
-                    </td>
-                    <td>
-                        <%=address.getState()%>
-                    </td>
-                    <td>
-                        <%=address.getZip()%>
-                    </td>
-                    <td>
-                        <%=address.getEmail()%>
-                    </td>
-                    <td>
-                        <%=address.getPhoneNumber()%>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <input type="CHECKBOX" name="selAddressList" value="<%=address.getAddressId()%>">
+                </td>
+                <td>
+                    <a href="<%=config.getServletContext().getContextPath()%>/EditAddress?id=<%=address.getAddressId()%>"> <%=address.getDisplayName()%></a>
+                </td>
+                <td>
+                    <%=address.getLine1()%>
+                </td>
+                <td>
+                    <%=address.getLine2()%>
+                </td>
+                <td>
+                    <%=address.getCity()%>
+                </td>
+                <td>
+                    <%=address.getState()%>
+                </td>
+                <td>
+                    <%=address.getZip()%>
+                </td>
+                <td>
+                    <%=address.getEmail()%>
+                </td>
+                <td>
+                    <%=address.getPhoneNumber()%>
+                </td>
+            </tr>
             <%
-                }
+                    }
                 }
             %>
 

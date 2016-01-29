@@ -39,6 +39,14 @@
         <servlet-name>EditAddress</servlet-name>
         <url-pattern>/EditAddress</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteUserAddress</servlet-name>
+        <servlet-class>com.jags.web.servlet.DeleteUserAddressServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteUserAddress</servlet-name>
+        <url-pattern>/DeleteUserAddress</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>/login/login.jsp</welcome-file>
     </welcome-file-list>
