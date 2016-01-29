@@ -27,8 +27,11 @@
         <table style="width:75%" align="center" border="0">
             <tr align="right">
                 <td>
+                    <a href="<%=config.getServletContext().getContextPath()%>/adduseraddress/adduseraddress.jsp" style="padding: 8px; background-color: gray; border-bottom-color: black;border-right-color: black;border: 1px">Add Address</a>
+<%--
                     <input type="button" name="btnAddAddress" value="Add Address"
                            style="border:thick" align="right" onclick="openPage('adduseraddress/adduseraddress.jsp')"/>
+--%>
                 </td>
             </tr>
             <tr>
@@ -58,7 +61,7 @@
                         <input type="CHECKBOX" name="selAddressList" value="<%=address.getAddressId()%>">
                     </td>
                     <td>
-                        <a href="#"> <%=address.getDisplayName()%></a>
+                        <a href="<%=config.getServletContext().getContextPath()%>/EditAddress?id=<%=address.getAddressId()%>"> <%=address.getDisplayName()%></a>
                     </td>
                     <td>
                         <%=address.getLine1()%>

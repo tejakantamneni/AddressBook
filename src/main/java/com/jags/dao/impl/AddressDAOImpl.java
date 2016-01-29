@@ -72,19 +72,19 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public void replaceEditTerm(Connection connection, Address addrToReplace, String UUIDToEdit) throws SQLException {
+    public void replaceEditTerm(Connection connection, Address addrToReplace) throws SQLException {
         //Address address = new Address();
         String sql = "UPDATE Address SET " +
-                " FIRSTNAME = ? ," +
-                " LASTNAME = ? ," +
-                " ADDRESS1 = ? ," +
-                " ADDRESS2 = ? ," +
+                " FIRST_NAME = ? ," +
+                " LAST_NAME = ? ," +
+                " LINE1 = ? ," +
+                " LINE2 = ? ," +
                 " CITY = ? ," +
                 " STATE = ? ," +
                 " ZIP = ? ," +
                 " PHONE = ? ," +
                 " EMAIL = ? " +
-                " WHERE UUID = ? ";
+                " WHERE ADDRESS_ID = ? ";
 
         PreparedStatement stmt = connection.prepareStatement(sql);
 
@@ -97,7 +97,7 @@ public class AddressDAOImpl implements AddressDAO {
         stmt.setString(7, addrToReplace.getZip());
         stmt.setString(8, addrToReplace.getPhoneNumber());
         stmt.setString(9, addrToReplace.getEmail());
-        stmt.setString(10, UUIDToEdit);
+        stmt.setInt(10, addrToReplace.getAddressId());
 
         stmt.execute();
 
@@ -108,12 +108,12 @@ public class AddressDAOImpl implements AddressDAO {
     }
 
     @Override
-    public Optional<Address> findMatchingAddress(Connection connection, String UUIDToMatch) throws SQLException {
+    public Optional<Address> findMatchingAddress(Connection connection, int addressId) throws SQLException {
         List<Address> addressList = new ArrayList<>();
         String query = "select * from address " +
-                " where UUID = ? ";
+                " where ADDRESS_ID = ? ";
         PreparedStatement stmt = connection.prepareStatement(query);
-        stmt.setString(1, UUIDToMatch);
+        stmt.setInt(1, addressId);
 
         ResultSet resultSet = stmt.executeQuery();
         parseResultSet(addressList, resultSet);

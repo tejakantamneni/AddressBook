@@ -20,9 +20,9 @@ public interface AddressDAO {
 
     List<Address> findMatchingAddressList(Connection connection, String searchTerm) throws SQLException;
 
-    Optional<Address> findMatchingAddress(Connection connection, String UUIDToMatch) throws SQLException;
+    Optional<Address> findMatchingAddress(Connection connection, int UUIDToMatch) throws SQLException;
 
-    void replaceEditTerm(Connection connection, Address addrToReplace, String UUIDToEdit) throws SQLException;
+    void replaceEditTerm(Connection connection, Address addrToReplace) throws SQLException;
 
     void deleteAddress(Connection connection, String UUIDtoDelete) throws  SQLException;
 
