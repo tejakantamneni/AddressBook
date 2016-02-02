@@ -4,17 +4,13 @@ import com.jags.dao.AddressDAO;
 import com.jags.dao.impl.AddressDAOImpl;
 import com.jags.dao.utils.DBUtils;
 import com.jags.model.User;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
-import com.sun.xml.internal.fastinfoset.util.StringArray;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Array;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 /**
  * Created by JParvathaneni on 1/28/16.

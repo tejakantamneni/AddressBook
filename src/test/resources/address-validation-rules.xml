@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<validation class="com.jags.model.Address">
+    <rule name="firstNameRequired">
+        <field>
+            <name>firstName</name>
+            <rule-type>requiredAndShouldBeAlphaCharactersOnly</rule-type>
+            <error-message>First Name for Address cannot be empty.</error-message>
+        </field>
+    </rule>
+    <rule name="lastNameRequired">
+        <field>
+            <name>lastName</name>
+            <rule-type>requiredAndShouldBeAlphaCharactersOnly</rule-type>
+            <error-message>Last Name for Address cannot be empty.</error-message>
+        </field>
+    </rule>
+    <rule name="line1Required">
+        <field>
+            <name>line1</name>
+            <rule-type>required</rule-type>
+            <error-message>Address Line 1 for Address cannot be empty.</error-message>
+        </field>
+    </rule>
+    <rule name="emailRequired">
+        <field>
+            <name>email</name>
+            <rule-type>ifPresentShouldBeValid</rule-type>
+            <error-message>Email should be a valid email foramt if present.</error-message>
+        </field>
+    </rule>
+</validation>
