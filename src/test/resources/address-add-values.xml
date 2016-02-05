@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Beans>
+    <Bean class = "com.jags.model.Address" name="BeanClass">
+        <address>
+            <property1 name = "firstname" value = "test first name">
+                <property2 name = "lastname" value = "test last name">
+                    <property3 name = "line1" value = "test line 1">
+                        <property4 name = "line2" value = "test line2">
+                            <property5 name = "city" value = "test city">
+                                <property6 name = "state" value = "test state">
+                                    <property7 name = "zip" value = "test zip">
+                                        <property8 name = "phonenumber" value = "test phone">
+                                            <property9 name = "email" value = "test email">
+                                            </property9>
+                                        </property8>
+                                    </property7>
+                                </property6>
+                            </property5>
+                        </property4>
+                    </property3>
+                </property>
+            </property1>
+        </address>
+    </Bean>
+</Beans>

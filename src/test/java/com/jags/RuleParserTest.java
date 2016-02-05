@@ -32,4 +32,13 @@ public class RuleParserTest {
         List<String> errors = validationFactory.validate(a);
         System.out.println(errors);
     }
+
+    @Test
+    public void testAddAddressValues(){
+        List<Rule> addresses = ruleParser.getRules("com.jags.model.Address");
+        Assert.assertEquals("Address value", 9, addresses.size());
+        Address address = new Address();
+        System.out.println(address.toString());
+
+    }
 }
