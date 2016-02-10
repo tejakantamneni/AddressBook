@@ -29,7 +29,6 @@ public class RuleParser {
             ruleSet = new HashMap<>();
             for(String file : ruleFiles){
                 parseRuleFile(ruleSet, file);
-                parseAddressFile(ruleSet, file);
             }
         }
     }
@@ -70,43 +69,5 @@ public class RuleParser {
         ruleSet.put(valiationClassName, validationRules);
     }
 
-    private void parseAddressFile(Map<String, List<Address>> ruleSet, String file) throws Exception {
-        File inputFile = new File(file);
-        List<Address> addressValues = new ArrayList<>();
-        LOG.info("parsing file - " + inputFile.getAbsolutePath());
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document validationDocument = dBuilder.parse(inputFile);
-        validationDocument.getDocumentElement().normalize();
-        String valiationClassName = validationDocument.getDocumentElement().getAttribute("class");
-        LOG.debug("parsing rules for validation class [" + valiationClassName + "]");
-
-        NodeList propNodes = validationDocument.getElementsByTagName("Bean");
-        for(int i = 0; i < propNodes.getLength(); i ++){
-            Address address = new Address();
-            Element addressElement = (Element) propNodes.item(i);
-            Element fieldNode1 = (Element) addressElement.getElementsByTagName("property1").item(0);
-            address.setFirstName(((fieldNode1.getElementsByTagName("value").item(0)).getTextContent()));
-            Element fieldNode2 = (Element) addressElement.getElementsByTagName("property2").item(0);
-            address.setFirstName(((fieldNode2.getElementsByTagName("value").item(0)).getTextContent()));
-            Element fieldNode3 = (Element) addressElement.getElementsByTagName("property3").item(0);
-            address.setFirstName(((fieldNode3.getElementsByTagName("value").item(0)).getTextContent()));
-            Element fieldNode4 = (Element) addressElement.getElementsByTagName("property4").item(0);
-            address.setFirstName(((fieldNode4.getElementsByTagName("value").item(0)).getTextContent()));
-            Element fieldNode5 = (Element) addressElement.getElementsByTagName("property5").item(0);
-            address.setFirstName(((fieldNode5.getElementsByTagName("value").item(0)).getTextContent()));
-            Element fieldNode6 = (Element) addressElement.getElementsByTagName("property6").item(0);
-            address.setFirstName(((fieldNode6.getElementsByTagName("value").item(0)).getTextContent()));
-            Element fieldNode7 = (Element) addressElement.getElementsByTagName("property7").item(0);
-            address.setFirstName(((fieldNode7.getElementsByTagName("value").item(0)).getTextContent()));
-            Element fieldNode8 = (Element) addressElement.getElementsByTagName("property8").item(0);
-            address.setFirstName(((fieldNode8.getElementsByTagName("value").item(0)).getTextContent()));
-            Element fieldNode9 = (Element) addressElement.getElementsByTagName("property9").item(0);
-            address.setFirstName(((fieldNode9.getElementsByTagName("value").item(0)).getTextContent()));
-
-            addressValues.add(address);
-        }
-        ruleSet.put(valiationClassName, addressValues);
-    }
 }
 
